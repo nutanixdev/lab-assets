@@ -23,21 +23,21 @@
 
                 <ul class="nav navbar-nav">
 
-                    {!! Form::hidden( 'csrf_token', csrf_token(), [ 'id' => 'csrf_token' ] ) !!}
                     <li><a href="#">Home</a></li>
                     <li><a href="#" class="saveLayout">Save Layout</a></li>
                     <li><a href="#" class="defaultLayout">Revert to Default Layout</a></li>
 
                 </ul>
 
-                {!! Form::open( [ 'class' => 'navbar-form navbar-left' ] ) !!}
+                <form action="/" method="POST" class="navbar-form navbar-form-left">
+                {!! Form::hidden( 'csrf_token', csrf_token(), [ 'id' => 'csrf_token' ] ) !!}
                 <div class="form-group">
                     {!! Form::text( 'cvmAddress', null, [ 'id' => 'cvmAddress', 'class' => 'form-control', 'placeholder' => 'Cluster/CVM IP' ] ) !!}
                     {!! Form::text( 'username', null, [ 'id' => 'username', 'class' => 'form-control', 'placeholder' => 'Cluster Username' ] ) !!}
                     {!! Form::password( 'password', [ 'id' => 'password', 'class' => 'form-control', 'placeholder' => 'Cluster Password' ] ) !!}
                     {!! Form::submit( 'Go!', [ 'id' => 'goButton', 'class' => 'btn btn-primary' ] ) !!}
                 </div>
-                {!! Form::close() !!}
+                </form>
 
             </div>
         </div>
