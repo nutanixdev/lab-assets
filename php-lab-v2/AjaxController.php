@@ -56,59 +56,31 @@ class AjaxController extends Controller
     }
 
     /**
-     * Return some information about the specified cluster
+     * Return a list of Prism Central managed entities, based on a specified entity identifier/name
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function postClusterInfo()
+    public function postPcListEntities()
     {
-        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'objectPath' => 'cluster'];
-    
-        $results = (new ApiRequest(new ApiRequestParameters($parameters)))->doApiRequest(null, 'GET');
+
+        $entity = $_POST['_entity'];
+        // $entity = 'image';
+
+        $body = [ 'kind' => $entity ];
+
+        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'topLevelPath' => 'api/nutanix/v3', 'objectPath' => $entity . 's/list', 'method' => 'POST', 'body' => json_encode($body), 'entity' => $entity ];
+
+        // $parameters = ['username' => 'admin', 'password' => 'm@rkeT/4u!', 'cvmAddress' => '10.42.250.39', 'topLevelPath' => 'api/nutanix/v3', 'objectPath' => $entity . 's/list', 'method' => 'POST', 'body' => json_encode($body), 'entity' => $entity ];
+          
+        $results = (new ApiRequest(new ApiRequestParameters($parameters)))->doApiRequest(null, 'POST');
 
         return response()->json(['results' => $results]);
     }
 
     /**
-     * Return some information about the VMs running on the specified cluster
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function postVmInfo()
-    {
-        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'objectPath' => 'vms'];
-
-        $vms = (new ApiRequest(new ApiRequestParameters($parameters)))->doApiRequest();
-
-        $vmCount = $vms->metadata->grand_total_entities;
-
-        return response()->json(['vmCount' => $vmCount]);
-    }
-
-    /**
-     * Return some information about the specified cluster's physical details (nodes etc)
      * 
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function postPhysicalInfo()
-    {
-        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'objectPath' => 'hosts'];        
-
-        $physical = (new ApiRequest(new ApiRequestParameters($parameters)))->doApiRequest();
-
-        $hostCount = $physical->metadata->grand_total_entities;
-
-        $hostSerials = '';
-
-        foreach ($physical->entities as $host) {
-            $hostSerials = $hostSerials . 'S/N&nbsp;' . $host->serial . '<br>';
-        }
-
-        return response()->json(['hostCount' => $hostCount, 'hostSerials' => $hostSerials]);
-    }
-
-    /**
      * Return some high level storage container performance stats
+     * This function isn't used in v2 of the lab, but has been left here as useful reference
      *
      * @return \Illuminate\Http\JsonResponse
      */

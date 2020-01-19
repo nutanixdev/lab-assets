@@ -19,3 +19,5 @@ Route::post( 'ajax/physical-info', 'AjaxController@postPhysicalInfo') ;
 Route::post( 'ajax/vm-info', 'AjaxController@postVmInfo') ;
 Route::post( 'ajax/cluster-info', 'AjaxController@postClusterInfo') ;
 Route::post( 'ajax/container-info', 'AjaxController@postContainerInfo') ;
+Route::post( 'ajax/pc-cluster-info', 'AjaxController@postPcClusterInfo' );
+Route::post( 'ajax/pc-list-entities', 'AjaxController@postPcListEntities' );

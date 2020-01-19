@@ -80,6 +80,16 @@ class ApiRequestParameters extends Model
     var $interval;
 
     /**
+     * The request body, if required
+     */
+    var $body;
+
+    /**
+     * The entity type to list, if that is the type of request being made
+     */
+    var $entity;
+
+    /**
      * ApiRequestParameters constructor.
      * @param array $attributes
      */
@@ -100,5 +110,7 @@ class ApiRequestParameters extends Model
         $this->startTime = isset($attributes['startTime']) ? $attributes['startTime'] : null;
         $this->endTime = isset($attributes['endTime']) ? $attributes['endTime'] : null;
         $this->interval = isset($attributes['interval']) ? $attributes['interval'] : null;
+        $this->body = isset($attributes['body']) ? $attributes['body'] : null;
+        $this->entity = isset($attributes['entity']) ? $attributes['entity'] : null;
     }
 }

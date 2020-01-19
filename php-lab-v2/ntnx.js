@@ -1,6 +1,13 @@
 var NtnxDashboard;
 NtnxDashboard = {
 
+    /**
+     * 
+     * @param {*} config 
+     * 
+     * Initialise the application
+     * 
+     */
     init: function ( config )
     {
         this.config = config;
@@ -18,171 +25,89 @@ NtnxDashboard = {
     },
     /* init */
 
+    /**
+     * 
+     * @param {*} cell 
+     * 
+     * Remove existing contents of a specified DOM element
+     * 
+     */
     resetCell: function( cell )
     {
         $( '#' + cell ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' );
     },
+    /* resetCell */
 
-    physicalInfo: function( token, cvmAddress, username, password )
-    {
-        physicalData = $.ajax({
-            url: '/ajax/physical-info',
+    /**
+     * 
+     * @param {*} token 
+     * @param {*} cvmAddress 
+     * @param {*} username 
+     * @param {*} password 
+     * @param {*} entity 
+     * @param {*} pageElement 
+     * @param {*} elementTitle 
+     * 
+     * main function to build and send the entity list requests
+     * the previous version of this used a single function for each request
+     * 
+     */
+    pcListEntities: function( token, cvmAddress, username, password, entity, pageElement, elementTitle ) {
+
+        pcEntityInfo = $.ajax({
+            url: '/ajax/pc-list-entities',
             type: 'POST',
             dataType: 'json',
-            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password },
+            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password, _entity: entity, _pageElement: pageElement, _elementTitle: elementTitle },
         });
 
-        physicalData.done( function(data) {
-            NtnxDashboard.resetCell( 'hosts' );
-            $( '#hosts' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">' + data.hostCount + ' Hosts</div>' );
-            $( '#hosts' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">' + data.hostSerials + '</div>' );
-        });
+        pcEntityInfo.done( function(data) {
 
-        physicalData.fail(function ( jqXHR, textStatus, errorThrown )
-        {
-            $( '#status_new' ).removeClass().html( textStatus + ' - ' + errorThrown ).addClass( 'alert' ).addClass( 'alert-error' );
-        });
-    },
+            NtnxDashboard.resetCell( pageElement );
+            $( '#' + pageElement  ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">' + elementTitle + '</div><div>' + data.results.metadata.total_matches + '</div><div></div>');
 
-    vmInfo: function( token, cvmAddress, username, password )
-    {
+            switch( entity ) {
+                case 'project':
 
-        vmData = $.ajax({
-            url: '/ajax/vm-info',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password },
-        });
+                    $( '#project_details' ).addClass( 'info_big' ).html( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Project List</div>' );
 
-        vmData.done( function(data) {
-            NtnxDashboard.resetCell( 'vmInfo' );
-            $( '#vmInfo' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">VM(s)</div><div>' + data.vmCount + '</div><div></div>');
-        });
+                    $( data.results.entities ).each( function( index, item ) {
+                        $( '#project_details' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">' +  item.status.name + '</div>' );
+                    });
 
-        vmData.fail(function ( jqXHR, textStatus, errorThrown )
-        {
-            $( '#status_new' ).removeClass().html( textStatus + ' - ' + errorThrown ).addClass( 'alert' ).addClass( 'alert-error' );
-        });
-    },
+                    $( '#project_details' ).append( '</div><div></div>' );
 
-    clusterInfo: function( token, cvmAddress, username, password )
-    {
+                default:
+                    break;
+            }
 
-        clusterInfo = $.ajax({
-            url: '/ajax/cluster-info',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password },
-        });
-
-        clusterInfo.done( function(data) {
-            NtnxDashboard.resetCell( 'nosVersion' );
-            $( '#nosVersion' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">NOS</div><div>' + data.results.version + '</div><div></div>');
-
-            NtnxDashboard.resetCell( 'clusterSummary' );
-            $( '#clusterSummary' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Cluster</div><div>' + data.results.name + '</div><div></div>');
-
-            NtnxDashboard.resetCell( 'blocks' );
-            $( '#blocks' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Hypervisors</div>' );
-            $( '#blocks' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">' );
-
-            $( data.results.hypervisor_types ).each( function( index, item ) {
-                switch( item )
-                {
-                    case 'kKvm':
-                        $( '#blocks' ).append( 'AHV' );
-                        break;
-                    case 'kVMware':
-                        $( '#blocks' ).append( 'ESXi' );
-                        break;
-                    case 'kHyperv':
-                        $( '#blocks' ).append( 'Hyper-V' );
-                        break;
-                }
-            });
-
-            $( '#blocks' ).append( '</div' );
-
-        });
-
-        clusterInfo.fail(function ( jqXHR, textStatus, errorThrown )
-        {
-            $( '#status_new' ).removeClass().html( textStatus + ' - ' + errorThrown ).addClass( 'alert' ).addClass( 'alert-error' );
         });
 
     },
+    /* pcListEntities */
 
-    containerInfo: function( token, cvmAddress, username, password ) {
-
-        /* AJAX call to get some container stats */
-        request = $.ajax({
-            url: '/ajax/container-info',
-            type: 'POST',
-            dataType: 'json',
-            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password },
-        });
-
-        request.done( function(data) {
-            var plot1 = $.jqplot ('controllerIOPS', data.stats, {
-                title: 'Controller Average I/O Latency',
-                animate: true,
-                axesDefaults: {
-                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
-                    tickOptions: {
-                        showMark: false,
-                        show: true,
-                    },
-                    showTickMarks: false,
-                    showTicks: false
-                },
-                seriesDefaults: {
-                    rendererOptions: {
-                        smooth: false
-                    },
-                    showMarker: false,
-                    fill: true,
-                    fillAndStroke: true,
-                    color: '#b4d194',
-                    fillColor: '#b4d194',
-                    fillAlpha: '0.3',
-                    // fillColor: '#bfde9e',
-                    shadow: false,
-                    shadowAlpha: 0.1,
-                },
-                axes: {
-                    xaxis: {
-                        min: 5,
-                        max: 120,
-                        tickOptions: {
-                            showGridline: true,
-                        }
-                    },
-                    yaxis: {
-                        tickOptions: {
-                            showGridline: false,
-                        }
-                    }
-                }
-            });
-
-            NtnxDashboard.resetCell( 'containers' );
-            $( '#containers' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Container(s)</div><div>' + data.containerCount + '</div><div></div>');
-
-        });
-
-        request.fail(function ( jqXHR, textStatus, errorThrown )
-        {
-            $( '#status_new' ).removeClass().html( textStatus + ' - ' + errorThrown ).addClass( 'alert' ).addClass( 'alert-error' );
-        });
-
-    },
-
+    /**
+     * 
+     * @param {*} token 
+     * 
+     * Remove the big graph DOM element from the page entirely
+     * Legacy function from previous version, but may be used again
+     * 
+     */
     removeGraph: function( token ) {
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
         var element = $( '#bigGraph' );
         gridster.remove_widget( element );
     },
+    /* removeGraph */
 
+    /**
+     * 
+     * @param {*} token 
+     * 
+     * Revert the altered grid layout to the default from when the lab app was built
+     * 
+     */
     restoreDefaultLayout: function( token ) {
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
         gridster.remove_all_widgets();
@@ -212,13 +137,29 @@ NtnxDashboard = {
         });
 
     },
+    /* restoreDefaultLayout */
 
+    /**
+     * 
+     * @param {*} token 
+     * 
+     * Get the grid's layout and serialize it in a format appropriate for transmission
+     * 
+     */
     serializeLayout: function( token ) {
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
         var json = gridster.serialize();
         $( '#serialized' ).html( JSON.stringify( json ) );
     },
+    /* serializeLayout */
 
+    /**
+     * 
+     * @param {*} token 
+     * 
+     * Save the user's layout changes to on-disk JSON file
+     * 
+     */
     saveLayout: function( token ) {
         /* get the gridster object */
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
@@ -246,12 +187,26 @@ NtnxDashboard = {
         });
 
     },
+    /* saveLayout */
 
+    /**
+     * 
+     * Can't remember what this is for lol
+     * Just kidding - it's for some tests carried out during development
+     * 
+     */
     s4: function()
     {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     },
+    /* s4 */
 
+    /**
+     * 
+     * Load the existing/saved grid layout from dashboard.json
+     * This file holds the default layout if no changes have been made, or the layout setup by the user after saving
+     * 
+     */
     loadLayout: function()
     {
         request = $.ajax({
@@ -269,20 +224,16 @@ NtnxDashboard = {
             var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
             var serialization = JSON.parse( data.layout );
 
-            // $( '#serialized' ).html( data.layout );
-
             serialization = Gridster.sort_by_row_and_col_asc(serialization);
             $.each( serialization, function() {
-                // gridster.add_widget('<li id="' + this.id + '"><div class="panel"><div class="panel-body"></div></div></li>', this.size_x, this.size_y, this.col, this.row);
                 gridster.add_widget('<li id="' + this.id + '" />', this.size_x, this.size_y, this.col, this.row);
             });
 
             /* add the chart markup to the largest containers */
-            // $( 'li#bigGraph' ).addClass( 'panel' ).append( '<div class="panel-body"><div id="chartdiv" style="height: 330px; width: 330px; text-align: center;"></div></div>' );
             $( 'li#footerWidget' ).addClass( 'panel' ).append( '<div class="panel-body"><div id="controllerIOPS" style="height: 150px; width: 1000px; text-align: center;"></div></div>' );
 
             NtnxDashboard.resetCell( 'bigGraph' );
-            $( '#bigGraph' ).addClass( 'info_hilite' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Hey ...</div><div>Enter your cluster details above, then click the Go button ...</div>');
+            $( '#bigGraph' ).addClass( 'info_hilite' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Hey ...</div><div>Enter your Prism Central details above, then click the Go button ...</div>');
             $( '#hints' ).addClass( 'info_hilite' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Also ...</div><div>Drag &amp; Drop<br>The Boxes</div>');
 
         });
@@ -293,7 +244,13 @@ NtnxDashboard = {
             alert( 'Unfortunately an error occurred while processing the request.  Status: ' + textStatus + ', Error Thrown: ' + errorThrown );
         });
     },
+    /* loadLayout */
 
+    /**
+     * 
+     * Setup the page's main grid
+     * 
+     */
     setupGridster: function ()
     {
         $( function ()
@@ -329,11 +286,15 @@ NtnxDashboard = {
 
         } );
     },
+    /* setupGridster */
 
+    /**
+     * 
+     * Apply tooltips to various elements and setup the delay on some animations
+     * 
+     */
     setUI: function ()
     {
-
-        // $( 'input#date' ).datepicker();
 
         $( 'div.alert-success' ).delay( 3000 ).slideUp( 1000 );
         $( 'div.alert-info' ).delay( 3000 ).slideUp( 1000 );
@@ -345,6 +306,12 @@ NtnxDashboard = {
     },
     /* setUI */
 
+    /**
+     * 
+     * Bind events that will get triggered in response to various actions
+     * In particular, button clicks
+     * 
+     */
     bindEvents: function()
     {
 
@@ -364,14 +331,16 @@ NtnxDashboard = {
             else
             {
                 NtnxDashboard.resetCell( 'bigGraph' );
-                $( '#bigGraph' ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' ).removeClass( 'info_hilite' ).removeClass( 'info_error' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Ok ...</div><div>Let\'s test your cluster details ...</div>');
+                $( '#bigGraph' ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' ).removeClass( 'info_hilite' ).removeClass( 'info_error' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Ok ...</div><div>Gathering environment details ...</div>');
                 NtnxDashboard.resetCell( 'hints' );
                 $( '#hints' ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' ).addClass( 'info_hilite' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Also ...</div><div>Drag &amp; Drop<br>The Boxes</div>');
-
-                NtnxDashboard.clusterInfo( $( '#csrf_token' ).val(), cvmAddress, username, password );
-                NtnxDashboard.physicalInfo( $( '#csrf_token' ).val(), cvmAddress, username, password );
-                NtnxDashboard.vmInfo( $( '#csrf_token' ).val(), cvmAddress, username, password );
-                NtnxDashboard.containerInfo( $( '#csrf_token' ).val(), cvmAddress, username, password );
+              
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'cluster', 'registered_clusters', 'Registered Clusters' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'image', 'image_count', 'Images' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'vm', 'vm_count', 'VMs' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'host', 'host_count', 'Hosts &amp; PC Nodes' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'project', 'project_count', 'Project Count' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'app', 'app_count', 'Calm' );
             }
 
             e.preventDefault();
@@ -403,7 +372,7 @@ NtnxDashboard = {
         });
 
         $( '.testButton' ).on( 'click', function( e ) {
-            $( '#clusterSummary' ).html( 'Hello' );
+            $( '#registered_clusters' ).html( 'Hello' );
             e.preventDefault();
         });
 

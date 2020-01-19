@@ -32,9 +32,9 @@
                 <form action="/" method="POST" class="navbar-form navbar-form-left">
                 {!! Form::hidden( 'csrf_token', csrf_token(), [ 'id' => 'csrf_token' ] ) !!}
                 <div class="form-group">
-                    {!! Form::text( 'cvmAddress', null, [ 'id' => 'cvmAddress', 'class' => 'form-control', 'placeholder' => 'Cluster/CVM IP' ] ) !!}
-                    {!! Form::text( 'username', null, [ 'id' => 'username', 'class' => 'form-control', 'placeholder' => 'Cluster Username' ] ) !!}
-                    {!! Form::password( 'password', [ 'id' => 'password', 'class' => 'form-control', 'placeholder' => 'Cluster Password' ] ) !!}
+                    {!! Form::text( 'cvmAddress', null, [ 'id' => 'cvmAddress', 'class' => 'form-control', 'placeholder' => 'Prism Central IP' ] ) !!}
+                    {!! Form::text( 'username', null, [ 'id' => 'username', 'class' => 'form-control', 'placeholder' => 'Prism Central Username' ] ) !!}
+                    {!! Form::password( 'password', [ 'id' => 'password', 'class' => 'form-control', 'placeholder' => 'Prism Central Password' ] ) !!}
                     {!! Form::submit( 'Go!', [ 'id' => 'goButton', 'class' => 'btn btn-primary' ] ) !!}
                 </div>
                 </form>
