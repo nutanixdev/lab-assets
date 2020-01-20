@@ -100,7 +100,7 @@ class ApiRequestParameters extends Model
         $this->cvmAddress = $attributes['cvmAddress'];
         $this->cvmPort = isset($attributes['cvmPort']) ? $attributes['cvmPort'] : '9440';
         $this->topLevelStatsPath = isset($attributes['topLevelPath']) ? $attributes['topLevelPath'] : 'PrismGateway/services/rest/v1';
-        $this->topLevelPath = isset($attributes['topLevelPath']) ? $attributes['topLevelPath'] : 'api/nutanix/v2.0';
+        $this->topLevelPath = isset($attributes['topLevelPath']) ? $attributes['topLevelPath'] : 'api/nutanix/v3';
         $this->connectionTimeout = isset($attributes['connectionTimeout']) ? $attributes['connectionTimeout'] : 5;
         $this->method = isset($attributes['method']) ? $attributes['method'] : 'GET';
         $this->objectPath = $attributes['objectPath'] != null ? $attributes['objectPath'] : null;

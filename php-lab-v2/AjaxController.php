@@ -64,13 +64,10 @@ class AjaxController extends Controller
     {
 
         $entity = $_POST['_entity'];
-        // $entity = 'image';
 
         $body = [ 'kind' => $entity ];
 
-        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'topLevelPath' => 'api/nutanix/v3', 'objectPath' => $entity . 's/list', 'method' => 'POST', 'body' => json_encode($body), 'entity' => $entity ];
-
-        // $parameters = ['username' => 'admin', 'password' => 'm@rkeT/4u!', 'cvmAddress' => '10.42.250.39', 'topLevelPath' => 'api/nutanix/v3', 'objectPath' => $entity . 's/list', 'method' => 'POST', 'body' => json_encode($body), 'entity' => $entity ];
+        $parameters = ['username' => $_POST['_username'], 'password' => $_POST['_password'], 'cvmAddress' => $_POST['_cvmAddress'], 'objectPath' => $entity . 's/list', 'method' => 'POST', 'body' => json_encode($body), 'entity' => $entity ];
           
         $results = (new ApiRequest(new ApiRequestParameters($parameters)))->doApiRequest(null, 'POST');
 
