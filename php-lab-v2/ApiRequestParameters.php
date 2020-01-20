@@ -56,6 +56,9 @@ class ApiRequestParameters extends Model
 
     /**
      * The sub-path for the request, e.g. stats
+     * 
+     * Note this variable is not used in v2 of this lab, but has been left to ensure the postContainerInfo function can still be used
+     * 
      */
     var $objectSubPath;
 

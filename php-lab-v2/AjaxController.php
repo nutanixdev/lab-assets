@@ -77,7 +77,8 @@ class AjaxController extends Controller
     /**
      * 
      * Return some high level storage container performance stats
-     * This function isn't used in v2 of the lab, but has been left here as useful reference
+     * 
+     * This function isn't used in v2 of the lab, but has been left here as useful reference when gathering stats
      *
      * @return \Illuminate\Http\JsonResponse
      */
