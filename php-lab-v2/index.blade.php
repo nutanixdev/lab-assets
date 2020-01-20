@@ -46,14 +46,6 @@
     <div class="container" style="margin-top: 20px;">
         <div class="row">
             <div class="col-md-15">
-                <div id="status_new" class="alert alert-warning">
-                    <span class="glyphicon glyphicon-time"></span>&nbsp;
-                    Your session has expired.&nbsp;&nbsp;Please <a href="{{ URL::to( '/signin' ) }}" title="Sign In">sign in</a> again to continue.
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-15">
                 @include( 'vendor.flash.message' )
                 <div class="container">
                     <div class="row">

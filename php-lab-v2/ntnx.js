@@ -2,12 +2,12 @@ var NtnxDashboard;
 NtnxDashboard = {
 
     /**
-     * 
-     * @param {*} config 
-     * 
-     * Initialise the application
-     * 
-     */
+    *
+    * @param {*} config
+    *
+    * Initialise the application
+    *
+    */
     init: function ( config )
     {
         this.config = config;
@@ -26,12 +26,12 @@ NtnxDashboard = {
     /* init */
 
     /**
-     * 
-     * @param {*} cell 
-     * 
-     * Remove existing contents of a specified DOM element
-     * 
-     */
+    *
+    * @param {*} cell
+    *
+    * Remove existing contents of a specified DOM element
+    *
+    */
     resetCell: function( cell )
     {
         $( '#' + cell ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' );
@@ -39,19 +39,19 @@ NtnxDashboard = {
     /* resetCell */
 
     /**
-     * 
-     * @param {*} token 
-     * @param {*} cvmAddress 
-     * @param {*} username 
-     * @param {*} password 
-     * @param {*} entity 
-     * @param {*} pageElement 
-     * @param {*} elementTitle 
-     * 
-     * main function to build and send the entity list requests
-     * the previous version of this used a single function for each request
-     * 
-     */
+    *
+    * @param {*} token
+    * @param {*} cvmAddress
+    * @param {*} username
+    * @param {*} password
+    * @param {*} entity
+    * @param {*} pageElement
+    * @param {*} elementTitle
+    *
+    * main function to build and send the entity list requests
+    * the previous version of this used a single function for each request
+    *
+    */
     pcListEntities: function( token, cvmAddress, username, password, entity, pageElement, elementTitle ) {
 
         pcEntityInfo = $.ajax({
@@ -87,13 +87,13 @@ NtnxDashboard = {
     /* pcListEntities */
 
     /**
-     * 
-     * @param {*} token 
-     * 
-     * Remove the big graph DOM element from the page entirely
-     * Legacy function from previous version, but may be used again
-     * 
-     */
+    *
+    * @param {*} token
+    *
+    * Remove the big graph DOM element from the page entirely
+    * Legacy function from previous version, but may be used again
+    *
+    */
     removeGraph: function( token ) {
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
         var element = $( '#bigGraph' );
@@ -102,12 +102,12 @@ NtnxDashboard = {
     /* removeGraph */
 
     /**
-     * 
-     * @param {*} token 
-     * 
-     * Revert the altered grid layout to the default from when the lab app was built
-     * 
-     */
+    *
+    * @param {*} token
+    *
+    * Revert the altered grid layout to the default from when the lab app was built
+    *
+    */
     restoreDefaultLayout: function( token ) {
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
         gridster.remove_all_widgets();
@@ -140,26 +140,12 @@ NtnxDashboard = {
     /* restoreDefaultLayout */
 
     /**
-     * 
-     * @param {*} token 
-     * 
-     * Get the grid's layout and serialize it in a format appropriate for transmission
-     * 
-     */
-    serializeLayout: function( token ) {
-        var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
-        var json = gridster.serialize();
-        $( '#serialized' ).html( JSON.stringify( json ) );
-    },
-    /* serializeLayout */
-
-    /**
-     * 
-     * @param {*} token 
-     * 
-     * Save the user's layout changes to on-disk JSON file
-     * 
-     */
+    *
+    * @param {*} token
+    *
+    * Save the user's layout changes to on-disk JSON file
+    *
+    */
     saveLayout: function( token ) {
         /* get the gridster object */
         var gridster = $( '.gridster ul' ).gridster().data( 'gridster' );
@@ -190,11 +176,11 @@ NtnxDashboard = {
     /* saveLayout */
 
     /**
-     * 
-     * Can't remember what this is for lol
-     * Just kidding - it's for some tests carried out during development
-     * 
-     */
+    *
+    * Can't remember what this is for lol
+    * Just kidding - it's for some tests carried out during development
+    *
+    */
     s4: function()
     {
         return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
@@ -202,11 +188,11 @@ NtnxDashboard = {
     /* s4 */
 
     /**
-     * 
-     * Load the existing/saved grid layout from dashboard.json
-     * This file holds the default layout if no changes have been made, or the layout setup by the user after saving
-     * 
-     */
+    *
+    * Load the existing/saved grid layout from dashboard.json
+    * This file holds the default layout if no changes have been made, or the layout setup by the user after saving
+    *
+    */
     loadLayout: function()
     {
         request = $.ajax({
@@ -247,10 +233,10 @@ NtnxDashboard = {
     /* loadLayout */
 
     /**
-     * 
-     * Setup the page's main grid
-     * 
-     */
+    *
+    * Setup the page's main grid
+    *
+    */
     setupGridster: function ()
     {
         $( function ()
@@ -289,10 +275,10 @@ NtnxDashboard = {
     /* setupGridster */
 
     /**
-     * 
-     * Apply tooltips to various elements and setup the delay on some animations
-     * 
-     */
+    *
+    * Apply tooltips to various elements and setup the delay on some animations
+    *
+    */
     setUI: function ()
     {
 
@@ -307,11 +293,11 @@ NtnxDashboard = {
     /* setUI */
 
     /**
-     * 
-     * Bind events that will get triggered in response to various actions
-     * In particular, button clicks
-     * 
-     */
+    *
+    * Bind events that will get triggered in response to various actions
+    * In particular, button clicks
+    *
+    */
     bindEvents: function()
     {
 
@@ -334,20 +320,16 @@ NtnxDashboard = {
                 $( '#bigGraph' ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' ).removeClass( 'info_hilite' ).removeClass( 'info_error' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Ok ...</div><div>Gathering environment details ...</div>');
                 NtnxDashboard.resetCell( 'hints' );
                 $( '#hints' ).html( '<span class="gs-resize-handle gs-resize-handle-both"></span>' ).addClass( 'info_hilite' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Also ...</div><div>Drag &amp; Drop<br>The Boxes</div>');
-              
+
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'cluster', 'registered_clusters', 'Registered Clusters' );
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'image', 'image_count', 'Images' );
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'vm', 'vm_count', 'VMs' );
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'host', 'host_count', 'Hosts &amp; PC Nodes' );
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'project', 'project_count', 'Project Count' );
-                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'app', 'app_count', 'Calm' );
+                NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'app', 'app_count', 'Calm Apps' );
+
             }
 
-            e.preventDefault();
-        });
-
-        $( '.serializeLayout' ).on( 'click', function( e ) {
-            NtnxDashboard.serializeLayout( $( '#csrf_token' ).val() );
             e.preventDefault();
         });
 
@@ -363,16 +345,6 @@ NtnxDashboard = {
 
         $( '.removeGraph' ).on( 'click', function( e ) {
             NtnxDashboard.removeGraph( $( '#csrf_token' ).val() );
-            e.preventDefault();
-        });
-
-        $( '.containerStats' ).on( 'click', function( e ) {
-            NtnxDashboard.containerInfo( $( '#csrf_token' ).val(), $( '#cvmAddress' ).val(), $( '#username' ).val(), $( '#password' ).val() );
-            e.preventDefault();
-        });
-
-        $( '.testButton' ).on( 'click', function( e ) {
-            $( '#registered_clusters' ).html( 'Hello' );
             e.preventDefault();
         });
 
