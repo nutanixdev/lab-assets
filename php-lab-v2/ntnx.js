@@ -328,6 +328,8 @@ NtnxDashboard = {
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'project', 'project_count', 'Project Count' );
                 NtnxDashboard.pcListEntities( $( '#csrf_token' ).val(), cvmAddress, username, password, 'app', 'app_count', 'Calm Apps' );
 
+                NtnxDashboard.containerInfo( $( '#csrf_token' ).val(), cvmAddress, username, password, 'controllerIOPS', 'Controller IOPS' );
+
             }
 
             e.preventDefault();
@@ -350,6 +352,67 @@ NtnxDashboard = {
 
     },
     /* bindEvents */
+
+    containerInfo: function( token, cvmAddress, username, password ) {
+
+        /* AJAX call to get some container stats */
+        request = $.ajax({
+            url: '/ajax/container-info',
+            type: 'POST',
+            dataType: 'json',
+            data: { _token: token, _cvmAddress: cvmAddress, _username: username, _password: password },
+        });
+
+        request.done( function(data) {
+            var plot1 = $.jqplot ('controllerIOPS', data.stats, {
+                title: 'Controller Average I/O Latency',
+                animate: true,
+                axesDefaults: {
+                    labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
+                    tickOptions: {
+                        showMark: false,
+                        show: true,
+                    },
+                    showTickMarks: false,
+                    showTicks: false
+                },
+                seriesDefaults: {
+                    rendererOptions: {
+                        smooth: false
+                    },
+                    showMarker: false,
+                    fill: true,
+                    fillAndStroke: true,
+                    color: '#b4d194',
+                    fillColor: '#b4d194',
+                    fillAlpha: '0.3',
+                    // fillColor: '#bfde9e',
+                    shadow: false,
+                    shadowAlpha: 0.1,
+                },
+                axes: {
+                    xaxis: {
+                        min: 5,
+                        max: 120,
+                        tickOptions: {
+                            showGridline: true,
+                        }
+                    },
+                    yaxis: {
+                        tickOptions: {
+                            showGridline: false,
+                        }
+                    }
+                }
+            });
+
+            NtnxDashboard.resetCell( 'containers' );
+            $( '#containers' ).addClass( 'info_big' ).append( '<div style="color: #6F787E; font-size: 25%; padding: 10px 0 0 0;">Container(s)</div><div>' + data.containerCount + '</div><div></div>');
+
+        });
+        
+    },
+    /* containerInfo */
 
 };
 
