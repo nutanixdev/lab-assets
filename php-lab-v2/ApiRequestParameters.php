@@ -8,94 +8,91 @@ class ApiRequestParameters extends Model
 {
 
     /**
-     * The username to use during the connection
-     */
+    * The username to use during the connection
+    */
     var $username;
 
     /**
-     * The password to use during the connection
-     */
+    * The password to use during the connection
+    */
     var $password;
 
     /**
-     * The path for the top level API request
-     */
+    * The path for the top level API request
+    */
     var $topLevelPath;
 
     /**
-     * The IP address of the CVM
-     */
+    * The IP address of the CVM
+    */
     var $cvmAddress;
 
     /**
-     * The port to connect on
-     */
+    * The port to connect on
+    */
     var $cvmPort;
 
     /**
-     * The timeout period i.e. how long to wait before the request is considered failed
-     * 
-     * Note the connectTimeout value is used for connection, read and request timeout
-     */
+    * The timeout period i.e. how long to wait before the request is considered failed
+    *
+    * Note the connectTimeout value is used for connection, read and request timeout
+    */
     var $connectionTimeout;
 
     /**
-     * Is this a GET or POST request?
-     */
+    * Is this a GET or POST request?
+    */
     var $method;
 
     /**
-     * The path to the main request e.g. containers, hosts
-     */
+    * The path to the main request e.g. containers, hosts
+    */
     var $objectPath;
 
     /**
-     * The ID of the object to make the request again
-     */
+    * The ID of the object to make the request again
+    */
     var $objectId;
 
     /**
-     * The sub-path for the request, e.g. stats
-     * 
-     * Note this variable is not used in v2 of this lab, but has been left to ensure the postContainerInfo function can still be used
-     * 
-     */
+    * The sub-path for the request, e.g. stats
+    */
     var $objectSubPath;
 
     /**
-     * The name of the metric to look at
-     */
+    * The name of the metric to look at
+    */
     var $metric;
 
     /**
-     * The start time for the query
-     */
+    * The start time for the query
+    */
     var $startTime;
 
     /**
-     * The end time for the query
-     */
+    * The end time for the query
+    */
     var $endTime;
 
     /**
-     * The query interval e.g. 30 for every 30 seconds
-     */
+    * The query interval e.g. 30 for every 30 seconds
+    */
     var $interval;
 
     /**
-     * The request body, if required
-     */
+    * The request body, if required
+    */
     var $body;
 
     /**
-     * The entity type to list, if that is the type of request being made
-     */
+    * The entity type to list, if that is the type of request being made
+    */
     var $entity;
 
     /**
-     * ApiRequestParameters constructor.
-     * @param array $attributes
-     */
+    * ApiRequestParameters constructor.
+    * @param array $attributes
+    */
     public function __construct(array $attributes)
     {
         $this->username = $attributes['username'];
