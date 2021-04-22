@@ -83,7 +83,7 @@ NtnxDashboard = {
 
         request.success( function(data) {
 
-            var plot1 = $.jqplot ('controllerIOPS', [ data['statsSpecificResponses'][0]['values'] ], {
+            var plot1 = $.jqplot ('controllerIOPS', [ data['stats_specific_responses'][0]['values'] ], {
                 title: 'Controller Average I/O Latency (Last 4 Hours)',
                 animate: true,
                 axesDefaults: {
